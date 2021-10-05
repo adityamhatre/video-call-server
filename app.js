@@ -22,6 +22,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/call', callsRouter);
 
-app.listen(3000, '0.0.0.0');
+app.listen(process.env.PORT || 3000, '0.0.0.0');
 
 module.exports = app;
