@@ -3,12 +3,6 @@ var router = express.Router();
 
 var admin = require("firebase-admin");
 
-var serviceAccount = process.env.SERVICE_ACCOUNT_KEY
-admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(serviceAccount))
-});
-
-
 sendNotification = function (fcmToken, roomId, username) {
     const message = {
         data: { roomId, username },
