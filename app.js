@@ -5,9 +5,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
 const callsRouter = require('./routes/calls');
 const deleteRoomRouter = require('./routes/deleteRoom')
+const versionRouter = require('./routes/version')
 
 var admin = require("firebase-admin");
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/call', callsRouter);
 app.use('/deleteRoom', deleteRoomRouter);
+app.use('/version', versionRouter);
 
 app.listen(process.env.PORT || 3000, '0.0.0.0');
 
