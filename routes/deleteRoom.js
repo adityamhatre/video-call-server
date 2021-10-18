@@ -9,7 +9,11 @@ deleteRoom = async (roomId) => {
     const roomsRef = firestore.collection('rooms')
 
     const roomDoc = roomsRef.doc(roomId);
-    
+    const room = await roomDoc.get()
+    if (!room.exists) {
+        return 404;
+    }
+
     const callerIceCandidatesCollection = roomDoc.collection('callerIceCandidates')
     const callerIceCandidatesDocs = await callerIceCandidatesCollection.listDocuments();
     callerIceCandidatesDocs.forEach(async callerIceCandidatesDoc => {
@@ -23,11 +27,12 @@ deleteRoom = async (roomId) => {
     })
 
     await roomDoc.delete();
+    return 200;
 }
 
 router.delete('/', async function (req, res, next) {
     const response = await deleteRoom(req.body['roomId'])
-    res.send();
+    res.status(response).send()
 });
 
 module.exports = router;
