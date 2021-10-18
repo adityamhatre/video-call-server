@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const version = 1.6
+const version = 1.8
 
 router.get('/', async function (req, res, next) {
     res.send({ version });
