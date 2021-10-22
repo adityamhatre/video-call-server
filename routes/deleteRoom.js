@@ -3,6 +3,12 @@ var router = express.Router();
 
 var admin = require("firebase-admin");
 
+const createDummyRoom = async (roomId) => {
+    console.log("Creating dummy room: " + roomId);
+    const firestore = admin.firestore()
+    const roomsRef = firestore.collection('rooms')
+    roomsRef.doc(roomId).set({ dummy: true });
+}
 const deleteCallback = async (roomId) => {
     console.log("Deleting room: " + roomId);
     const firestore = admin.firestore()
@@ -12,7 +18,7 @@ const deleteCallback = async (roomId) => {
     const room = await roomDoc.get()
     if (!room.exists) {
         console.log("Room does not exist: " + roomId);
-        return 404;
+        createDummyRoom(roomId);
     }
 
     console.log("Deleting room: " + roomId + " which exists");
