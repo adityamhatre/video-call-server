@@ -4,33 +4,40 @@ var router = express.Router();
 var admin = require("firebase-admin");
 
 const deleteCallback = async (roomId) => {
+    console.log("Deleting room: " + roomId);
     const firestore = admin.firestore()
     const roomsRef = firestore.collection('rooms')
 
     const roomDoc = roomsRef.doc(roomId);
     const room = await roomDoc.get()
     if (!room.exists) {
+        console.log("Room does not exist: " + roomId);
         return 404;
     }
 
+    console.log("Deleting room: " + roomId + " which exists");
     const callerIceCandidatesCollection = roomDoc.collection('callerIceCandidates')
     const callerIceCandidatesDocs = await callerIceCandidatesCollection.listDocuments();
     callerIceCandidatesDocs.forEach(async callerIceCandidatesDoc => {
         await callerIceCandidatesDoc.delete()
     })
+    await callerIceCandidatesCollection.delete()
 
     const recipientIceCandidatesCollection = roomDoc.collection('recipientIceCandidates')
     const recipientIceCandidatesDocs = await recipientIceCandidatesCollection.listDocuments();
     recipientIceCandidatesDocs.forEach(async recipientIceCandidatesDoc => {
         await recipientIceCandidatesDoc.delete()
     })
+    await recipientIceCandidatesCollection.delete()
 
     await roomDoc.delete();
+    console.log("Deleted room: " + roomId);
     return 200;
 }
 
 const deleteRoom = async (roomId) => {
     const TIMEOUT = 25;
+    console.log("Scheduled deleting room: " + roomId);
     return await new Promise(resolve => setTimeout(() => { resolve(deleteCallback(roomId)) }, TIMEOUT * 1000));
 }
 
