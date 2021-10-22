@@ -27,14 +27,12 @@ const deleteCallback = async (roomId) => {
     callerIceCandidatesDocs.forEach(async callerIceCandidatesDoc => {
         await callerIceCandidatesDoc.delete()
     })
-    await callerIceCandidatesCollection.delete()
 
     const recipientIceCandidatesCollection = roomDoc.collection('recipientIceCandidates')
     const recipientIceCandidatesDocs = await recipientIceCandidatesCollection.listDocuments();
     recipientIceCandidatesDocs.forEach(async recipientIceCandidatesDoc => {
         await recipientIceCandidatesDoc.delete()
     })
-    await recipientIceCandidatesCollection.delete()
 
     await roomDoc.delete();
     console.log("Deleted room: " + roomId);
